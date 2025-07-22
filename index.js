@@ -1,90 +1,158 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 const app = express();
 const port = 3000;
 
-const users = [
-  {
-    id: 1,
-    name: "Olexandr",
-    email: "olexandr@example.com",
-    password: "$2b$10$QqBh8YknqUt0KqYrxkP56O1Hr2G28eD9Mf0BW.NxwxdOJSm8rLM7K",
-  },
-  {
-    id: 2,
-    name: "Elena",
-    email: "elena@example.com",
-    password: "$2b$10$BHZc9O4fvMi0f7fMFoKHmeHjk4VK/wKcA0/56q3SY1h3fM7E4r36O",
-  },
-  {
-    id: 3,
-    name: "Ivan",
-    email: "ivan@example.com",
-    password: "$2b$10$z8zzFLdK5JlzF25PX8GBE.4GHrAf9xFcSYY.JPCU.vPd4kx2WEko6",
-  },
-  {
-    id: 4,
-    name: "Olena",
-    email: "olena@example.com",
-    password: "$2b$10$yo5RCBaCBJmbexvKnqN1QevO2pjA.OmZxuBipE1F/7mtZelUnW73a",
-  },
-  {
-    id: 5,
-    name: "Taras",
-    email: "taras@example.com",
-    password: "$2b$10$AeALF9yM5IM4D0O7jGp.JevDAfeY4AEArA9ZBx3mwKxAKFMBXyraG",
-  },
-  {
-    id: 6,
-    name: "Maria",
-    email: "maria@example.com",
-    password: "$2b$10$DOL.zYjNwHyGvUtxMky9euiULOK5HNsOcADIsrg1Nsn4O.SY9voHu",
-  },
-  {
-    id: 7,
-    name: "Petro",
-    email: "petro@example.com",
-    password: "$2b$10$AUfq6Tr6GYY9L77C3PKGyOxV3.ND9tTeYUEW.J1sNoZWog2oZaY3q",
-  },
-  {
-    id: 8,
-    name: "Nadia",
-    email: "nadia@example.com",
-    password: "$2b$10$AHTOBpxog3QmS4W5sKfjK.FD9xKKe2YOQaz5iS7lUrX6Y7RFBWEdO",
-  },
-  {
-    id: 9,
-    name: "Dmytro",
-    email: "dmytro@example.com",
-    password: "$2b$10$7CNec8kgY64UZ98ZQ7l8n.Q63IHnZmnLg1oBDZK5cFGY3GSkAgQvm",
-  },
-  {
-    id: 10,
-    name: "Iryna",
-    email: "iryna@example.com",
-    password: "$2b$10$OT8kBeUF41Soe/WApX8N9.ZnBCQ54FZFbZ3SY.bjeaQanYYb1bg9O",
-  },
-];
+const fs = require("fs/promises");
+const { constants } = require("fs");
+
+async function checkAndCreateFile(path) {
+  try {
+    await fs.access(path, constants.F_OK);
+  } catch (err) {
+    await fs.writeFile(path, "[]", "utf8");
+  }
+}
+
+void checkAndCreateFile("users.json");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/users", (req, res) => {
+app.get("/users", async (req, res) => {
   try {
-    res.send(users);
+    const data = await fs.readFile("users.json", "utf8");
+    const users = JSON.parse(data);
+    res.status(200).send(users);
   } catch (e) {
     res.status(500).send(e.message);
   }
 });
 
-app.post("/users", (req, res) => {
-  res.send("User Created");
-});
-
-app.get("/users/:id", (req, res) => {
+app.get("/users/:id", async (req, res) => {
   try {
+    const data = await fs.readFile("users.json", "utf8");
+    const users = JSON.parse(data);
     const userId = Number(req.params.id);
     const user = users.find((user) => user.id === userId);
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
     res.send(user);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+app.post("/users", async (req, res) => {
+  try {
+    const data = await fs.readFile("users.json", "utf8");
+    const users = JSON.parse(data);
+
+    const { name, email, age, password } = req.body;
+
+    if (!name || !email || !age || !password) {
+      return res.status(400).send("Missing name, email, age or password");
+    }
+
+    if (isNaN(age) || Number(age) < 0) {
+      return res
+        .status(400)
+        .send("Age must be a valid number greater than or equal to 0");
+    }
+
+    if (name.length <= 3) {
+      return res.status(400).send("Name must be longer than 3 characters");
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const newId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
+
+    const user = {
+      id: newId,
+      name: name,
+      age: age,
+      email: email,
+      password: passwordHash,
+    };
+
+    users.push(user);
+
+    await fs.writeFile("users.json", JSON.stringify(users, null, 2));
+
+    res.status(201).send(user);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
+app.patch("/users/:id", async (req, res) => {
+  const data = await fs.readFile("users.json", "utf8");
+  const users = JSON.parse(data);
+
+  const id = Number(req.params.id);
+  const user = users.find((user) => user.id === id);
+  const index = users.findIndex((user) => user.id === id);
+
+  if (!user) {
+    return res.status(404).send({ error: "User not found" });
+  }
+
+  const { name, email, age, password } = req.body;
+
+  if (!name || !email || !age || !password) {
+    return res.status(400).send("Missing name, email, age or password");
+  }
+
+  if (isNaN(age) || Number(age) < 0) {
+    return res
+      .status(400)
+      .send("Age must be a valid number greater than or equal to 0");
+  }
+
+  if (name.length <= 3) {
+    return res.status(400).send("Name must be longer than 3 characters");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+
+  const updatedUser = {
+    id: users[index].id,
+    name: req.body.name || users[index].name,
+    age: req.body.age || users[index].age,
+    email: req.body.email || users[index].email,
+    password: req.body.password
+      ? await bcrypt.hash(req.body.password, salt)
+      : users[index].password,
+  };
+
+  users[index] = updatedUser;
+
+  await fs.writeFile("users.json", JSON.stringify(users, null, 2));
+
+  res.send(updatedUser);
+});
+
+app.delete("/users/:id", async (req, res) => {
+  try {
+    const data = await fs.readFile("users.json", "utf8");
+    let users = JSON.parse(data);
+
+    const id = Number(req.params.id);
+    const user = users.find((user) => user.id === id);
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    users = users.filter((user) => user.id !== id);
+
+    await fs.writeFile("users.json", JSON.stringify(users, null, 2));
+
+    res.status(204).end();
   } catch (e) {
     res.status(500).send(e.message);
   }
