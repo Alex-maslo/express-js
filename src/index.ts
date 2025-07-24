@@ -1,12 +1,13 @@
 import path from "node:path";
 
 import bcrypt from "bcrypt";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { constants } from "fs";
 import fs from "fs/promises";
 
 import { read, write } from "./fs.service";
 import { IUser } from "./interfaces/user.interface";
+import { ApiError } from "./errors/api-error";
 
 const app = express();
 const port = 3000;
@@ -31,16 +32,15 @@ async function startServer() {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/users", async (req: Request, res: Response) => {
+app.get("/users", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await read();
-    res.status(200).send(users);
-  } catch (e: unknown) {
-    if (e instanceof Error) {
-      res.status(500).send(e.message);
-    } else {
-      res.status(500).send("Unknown error");
-    }
+    // Імітація помилки:
+    throw new ApiError("Test error: something went wrong", 404);
+
+    // const users = await read();
+    // res.status(200).send(users);
+  } catch (e) {
+    next(e);
   }
 });
 
@@ -196,6 +196,11 @@ app.post("/users/batch", async (req: Request, res: Response) => {
   } catch (e) {
     res.status(500).send(e.message);
   }
+});
+
+app.use((error: ApiError, req: Request, res: Response, next: NextFunction) => {
+  console.log(next());
+  res.status(error.status || 500).send(error.message);
 });
 
 startServer()
