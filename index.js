@@ -14,7 +14,12 @@ async function checkAndCreateFile(path) {
   }
 }
 
-void checkAndCreateFile("users.json");
+async function startServer() {
+  await checkAndCreateFile("users.json");
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -182,6 +187,11 @@ app.post("/users/batch", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
-});
+startServer()
+  .then(() => {
+    console.log("Server initialization complete.");
+  })
+  .catch((error) => {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  });
