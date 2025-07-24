@@ -1,21 +1,28 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
+import path from "node:path";
+
+import bcrypt from "bcrypt";
+import express, { Request, Response } from "express";
+import { constants } from "fs";
+import fs from "fs/promises";
+
+import { read, write } from "./fs.service";
+import { IUser } from "./interfaces/user.interface";
+
 const app = express();
 const port = 3000;
 
-const fs = require("fs/promises");
-const { constants } = require("fs");
+const DATA_PATH = path.join(__dirname, "db.json");
 
-async function checkAndCreateFile(path) {
+async function checkAndCreateFile(pathToFile: string) {
   try {
-    await fs.access(path, constants.F_OK);
-  } catch (err) {
-    await fs.writeFile(path, "[]", "utf8");
+    await fs.access(pathToFile, constants.F_OK);
+  } catch {
+    await fs.writeFile(pathToFile, "[]", "utf8");
   }
 }
 
 async function startServer() {
-  await checkAndCreateFile("users.json");
+  await checkAndCreateFile(DATA_PATH);
   app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
   });
@@ -24,20 +31,22 @@ async function startServer() {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/users", async (req, res) => {
+app.get("/users", async (req: Request, res: Response) => {
   try {
-    const data = await fs.readFile("users.json", "utf8");
-    const users = JSON.parse(data);
+    const users = await read();
     res.status(200).send(users);
-  } catch (e) {
-    res.status(500).send(e.message);
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      res.status(500).send(e.message);
+    } else {
+      res.status(500).send("Unknown error");
+    }
   }
 });
 
-app.get("/users/:id", async (req, res) => {
+app.get("/users/:id", async (req: Request, res: Response) => {
   try {
-    const data = await fs.readFile("users.json", "utf8");
-    const users = JSON.parse(data);
+    const users = await read();
     const userId = Number(req.params.id);
     const user = users.find((user) => user.id === userId);
 
@@ -45,12 +54,16 @@ app.get("/users/:id", async (req, res) => {
       return res.status(404).send({ error: "User not found" });
     }
     res.send(user);
-  } catch (e) {
-    res.status(500).send(e.message);
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      res.status(500).send(e.message);
+    } else {
+      res.status(500).send("Unknown error");
+    }
   }
 });
 
-app.post("/users", async (req, res) => {
+app.post("/users", async (req: Request, res: Response) => {
   try {
     const data = await fs.readFile("users.json", "utf8");
     const users = JSON.parse(data);
@@ -93,28 +106,28 @@ app.post("/users", async (req, res) => {
   }
 });
 
-app.patch("/users/:id", async (req, res) => {
+app.patch("/users/:id", async (req: Request, res: Response) => {
   const data = await fs.readFile("users.json", "utf8");
   const users = JSON.parse(data);
   const userId = Number(req.params.id);
-  const user = users.find((user) => user.id === userId);
+  const user = users.find((user: IUser) => user.id === userId);
 
   res.status(200).send(user);
 });
 
-app.delete("/users/:id", async (req, res) => {
+app.delete("/users/:id", async (req: Request, res: Response) => {
   try {
     const data = await fs.readFile("users.json", "utf8");
     let users = JSON.parse(data);
 
     const id = Number(req.params.id);
-    const user = users.find((user) => user.id === id);
+    const user = users.find((user: IUser) => user.id === id);
 
     if (!user) {
       return res.status(404).send({ error: "User not found" });
     }
 
-    users = users.filter((user) => user.id !== id);
+    users = users.filter((user: IUser) => user.id !== id);
 
     await fs.writeFile("users.json", JSON.stringify(users, null, 2));
 
@@ -124,7 +137,7 @@ app.delete("/users/:id", async (req, res) => {
   }
 });
 
-app.post("/users/batch", async (req, res) => {
+app.post("/users/batch", async (req: Request, res: Response) => {
   try {
     const incomingUsers = req.body;
 
@@ -132,8 +145,7 @@ app.post("/users/batch", async (req, res) => {
       return res.status(400).json({ error: "Expected an array of users" });
     }
 
-    const data = await fs.readFile("users.json", "utf8");
-    const existingUsers = JSON.parse(data);
+    const existingUsers = await read();
     let lastId =
       existingUsers.length > 0 ? existingUsers[existingUsers.length - 1].id : 0;
 
@@ -176,8 +188,7 @@ app.post("/users/batch", async (req, res) => {
     }
 
     const updatedUsers = [...existingUsers, ...newUsers];
-    await fs.writeFile("users.json", JSON.stringify(updatedUsers, null, 2));
-
+    await write(updatedUsers);
     res.status(201).json({
       message: "Users created successfully",
       users: newUsers,

@@ -4,41 +4,41 @@
     "name": "Олена Коваль",
     "email": "olena.koval@example.com",
     "age": 28,
-    "password": "$2b$10$C1BTJkLCoO/nsA62TkUHtuIh8CTFNnYWYX.o1DOsWPuMvrC0kYZdC"
+    "password": "$2b$10$2/W1eUDcCEWx2bi2M4BnaeO4/pr6wlKwtWdECxquOggkOn45t7IEi"
   },
   {
     "id": 2,
     "name": "Іван Петренко",
     "email": "ivan.petrenko@example.com",
     "age": 35,
-    "password": "$2b$10$TfUV9ZJHUQwhmRlGqMmpGOMOCoyV0QkRLA.wDTQRFTLgob9Jm2fte"
+    "password": "$2b$10$qsOA5uaO.zyAuyFtqs3icOqn.h45dlgV.7Xl0G/MMZRXQKRUfTGTq"
   },
   {
     "id": 3,
     "name": "Марія Сидоренко",
     "email": "maria.sydorenko@example.com",
     "age": 22,
-    "password": "$2b$10$0SCpKCJec2RMBw9kgYPbkeJU6K7PndcrUabn93QjX3Yp4gziV7Yuy"
+    "password": "$2b$10$Lm24uxQD1z1B76LN60BcM.7trChdXXEle1pbCIEBaAYHi47YLuW.q"
   },
   {
     "id": 4,
     "name": "Дмитро Мельник",
     "email": "dmytro.melnyk@example.com",
     "age": 41,
-    "password": "$2b$10$wmWSPIuz3eZ7uHgDc.UGZe7rSqoS/G7DmPDzE/ki2pEpZe3xoSksG"
+    "password": "$2b$10$00ce1G6k3RheCs1scwZIUOzZ5Up/GM0qQjiCbviyeqkO4hyT9bg7C"
   },
   {
     "id": 5,
     "name": "Софія Шевченко",
     "email": "sophia.shevchenko@example.com",
     "age": 19,
-    "password": "$2b$10$ZhlUQlFf34UDoCpQ4s74w.3PzT9Sxl2v2GCEnaJpMre//jOyNdRIm"
+    "password": "$2b$10$IMGSf9wXn5R7eVpa0XUiveLDwx6j/crStugskKG4lnrZPEUfkxIA6"
   },
   {
     "id": 6,
     "name": "Андрій Коваленко",
     "email": "andriy.kovalenko@example.com",
     "age": 55,
-    "password": "$2b$10$ZDPqWTi6b7m2BkmC61hO5Otql55uGwNIeMoqxMkn128rePw8k0Vnu"
+    "password": "$2b$10$jg4o3e1YzuhQ3hkw1lmxKePJcOIpfbNYSTy.StifcObPVzZ3MN7Wq"
   }
 ]
