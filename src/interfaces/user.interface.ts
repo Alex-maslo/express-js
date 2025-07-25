@@ -5,3 +5,10 @@ export interface IUser {
   age: number;
   password: string;
 }
+
+export interface ICreateUserDto {
+  name: string;
+  age: number;
+  email: string;
+  password: string;
+}
