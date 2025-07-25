@@ -1,44 +1,72 @@
 [
   {
     "id": 1,
-    "name": "Олена Коваль",
-    "email": "olena.koval@example.com",
-    "age": 28,
-    "password": "$2b$10$2/W1eUDcCEWx2bi2M4BnaeO4/pr6wlKwtWdECxquOggkOn45t7IEi"
+    "name": "Elena",
+    "email": "elena@example.com",
+    "age": "25",
+    "password": "$2b$10$xrhXjLlT2JAkiR1wKAnnLOfnajttpeYC/ZfcXBlXFnT82oLvmbR/O"
   },
   {
     "id": 2,
-    "name": "Іван Петренко",
-    "email": "ivan.petrenko@example.com",
-    "age": 35,
-    "password": "$2b$10$qsOA5uaO.zyAuyFtqs3icOqn.h45dlgV.7Xl0G/MMZRXQKRUfTGTq"
+    "name": "Ivan",
+    "email": "ivan@example.com",
+    "age": "30",
+    "password": "$2b$10$0XgdGQ9nJ9EHo0rAMR5DF.gGU7QLonm7klhEfS.wAIeadCQSW6L2."
   },
   {
     "id": 3,
-    "name": "Марія Сидоренко",
-    "email": "maria.sydorenko@example.com",
-    "age": 22,
-    "password": "$2b$10$Lm24uxQD1z1B76LN60BcM.7trChdXXEle1pbCIEBaAYHi47YLuW.q"
+    "name": "Oksana",
+    "email": "oksana@example.com",
+    "age": "28",
+    "password": "$2b$10$v2m3Dtk3ovqS7dJXBqkG9.1fDOl7Rgo83oXy0/s0OfvmNiX6dQ7Eq"
   },
   {
     "id": 4,
-    "name": "Дмитро Мельник",
-    "email": "dmytro.melnyk@example.com",
-    "age": 41,
-    "password": "$2b$10$00ce1G6k3RheCs1scwZIUOzZ5Up/GM0qQjiCbviyeqkO4hyT9bg7C"
+    "name": "Dmytro",
+    "email": "dmytro@example.com",
+    "age": "35",
+    "password": "$2b$10$Wio0bx0mToeNXardM92OnO6SWihnbRhOUDk91FseRnDc0Pt.SnQiS"
   },
   {
     "id": 5,
-    "name": "Софія Шевченко",
-    "email": "sophia.shevchenko@example.com",
-    "age": 19,
-    "password": "$2b$10$IMGSf9wXn5R7eVpa0XUiveLDwx6j/crStugskKG4lnrZPEUfkxIA6"
+    "name": "Kateryna",
+    "email": "kateryna@example.com",
+    "age": "22",
+    "password": "$2b$10$d5t7sdUFUj7kTW0fChzEyegUfaIDOYLHmA9/jSUw4R1oYOwPSYod6"
   },
   {
     "id": 6,
-    "name": "Андрій Коваленко",
-    "email": "andriy.kovalenko@example.com",
-    "age": 55,
-    "password": "$2b$10$jg4o3e1YzuhQ3hkw1lmxKePJcOIpfbNYSTy.StifcObPVzZ3MN7Wq"
+    "name": "Oleksandr",
+    "email": "oleksandr@example.com",
+    "age": "40",
+    "password": "$2b$10$Ib3al6I5HO9F5Q4xU1Zam.rHOh6tDxrADSZjmVvoemzG6BSjh7bBC"
+  },
+  {
+    "id": 7,
+    "name": "Nadiia",
+    "email": "nadiia@example.com",
+    "age": "27",
+    "password": "$2b$10$7DHxfPOEegbAYZqG4ymrKuDZDUppbOSW2vKjEP/NajKW.VgZ6MpZK"
+  },
+  {
+    "id": 8,
+    "name": "Serhii",
+    "email": "serhii@example.com",
+    "age": "33",
+    "password": "$2b$10$lNcK8BW3srFjtGkpRdYwSud.AdgcjJdFHZQ.Yc38QdEybN7CWOykq"
+  },
+  {
+    "id": 9,
+    "name": "Iryna",
+    "email": "iryna@example.com",
+    "age": "26",
+    "password": "$2b$10$v5dPcKGGwnFTeRYWKauudO4UiA39ET8aAXas3tjKl513eY93NL9by"
+  },
+  {
+    "id": 10,
+    "name": "Taras",
+    "email": "taras@example.com",
+    "age": "31",
+    "password": "$2b$10$0Vm9mtPogAs5vGcARfCyO.5/RiQRZZIXPhXe1nRvQ4Cn59IYuRv6C"
   }
 ]
