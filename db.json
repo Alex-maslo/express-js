@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "age": 28,
+    "email": "alice.johnson@example.com",
+    "password": "$2b$10$g8Zzao7fAaowRLQHOirjTuF4053q14JFqK1N4zh4KtFlq/w8qb87y"
+  },
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "age": 35,
+    "email": "bob.smith@example.com",
+    "password": "$2b$10$Y6g9ayqgFK16ap683Dvq4eXmI2YbpOTZFsdJ84oTmGWnljFZLWLgW"
+  },
+  {
+    "id": 3,
+    "name": "Charlie Brown",
+    "age": 22,
+    "email": "charlie.brown@example.com",
+    "password": "$2b$10$CrkhYt8xpm3hPZfe//xfZO3B7HVC8/P3P13sR6cb7qWkZli.KC9lC"
+  },
+  {
+    "id": 4,
+    "name": "Diana Prince",
+    "age": 30,
+    "email": "diana.prince@example.com",
+    "password": "$2b$10$OsTwQEjyrJDZLOCbNJi6fu1Im0KIO8WuVAXPePJd.HPLT8uPKqEQq"
+  },
+  {
+    "id": 5,
+    "name": "Ethan Hunt",
+    "age": 40,
+    "email": "ethan.hunt@example.com",
+    "password": "$2b$10$YgVKXBhcRjsTG.bwjjEUBuauCypO8oxVzsjQYgyZuK63D/v/3mpD6"
+  }
+]

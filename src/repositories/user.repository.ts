@@ -1,5 +1,6 @@
 import { read, write } from "../services/fs.service";
 import { ICreateUserDto, IUser } from "../interfaces/user.interface";
+import bcrypt from "bcrypt";
 
 class UserRepository {
   public async getList(): Promise<IUser[]> {
@@ -11,21 +12,43 @@ class UserRepository {
     const { name, age, email, password } = dto;
     const userId = users.length ? users[users.length - 1].id + 1 : 1;
 
-    if (!name) {
-      throw new Error(`User with name ${name} already exists`);
-    }
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const user = {
       id: userId,
       name: name,
       age: age,
       email: email,
-      password: password,
+      password: hashedPassword,
     };
     users.push(user);
     await write(users);
-    console.log(users);
     return user;
+  }
+
+  public async createMany(usersDto: ICreateUserDto[]): Promise<IUser[]> {
+    const users: IUser[] = await read();
+
+    for (const dto of usersDto) {
+      const { name, age, email, password } = dto;
+      const userId = users.length ? users[users.length - 1].id + 1 : 1;
+
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      const user = {
+        id: userId,
+        name: name,
+        age: age,
+        email: email,
+        password: hashedPassword,
+      };
+      users.push(user);
+    }
+    console.log(users);
+    await write(users);
+    return users;
   }
 }
 

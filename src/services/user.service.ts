@@ -9,6 +9,10 @@ class UserController {
   public async create(dto: ICreateUserDto) {
     return await userRepository.create(dto);
   }
+
+  public async createMany(usersDto: ICreateUserDto[]) {
+    return await userRepository.createMany(usersDto);
+  }
 }
 
 export const userService = new UserController();
