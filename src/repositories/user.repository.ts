@@ -1,10 +1,20 @@
 import { read, write } from "../services/fs.service";
 import { ICreateUserDto, IUser } from "../interfaces/user.interface";
 import bcrypt from "bcrypt";
+import { ApiError } from "../errors/api-error";
 
 class UserRepository {
   public async getList(): Promise<IUser[]> {
     return await read();
+  }
+
+  public async getOne(id: number): Promise<IUser> {
+    const users: IUser[] = await read();
+    const user = users.find((u) => u.id === id);
+    if (!user) {
+      throw new ApiError(404, `User with id ${id} not found`);
+    }
+    return user;
   }
 
   public async create(dto: ICreateUserDto): Promise<IUser> {
@@ -46,9 +56,18 @@ class UserRepository {
       };
       users.push(user);
     }
-    console.log(users);
+
     await write(users);
     return users;
+  }
+
+  public async delete(id: number): Promise<IUser> {
+    const users: IUser[] = await read();
+    const user = users.find((u) => u.id === id);
+    if (!user) {
+      throw new ApiError(404, `User with id ${id} not found`);
+    }
+    return user;
   }
 }
 

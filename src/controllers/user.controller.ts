@@ -12,6 +12,16 @@ class UserController {
     }
   }
 
+  public async getOne(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Number(req.params.id);
+      const user = await userService.getOne(id);
+      res.status(200).json(user);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   public async create(req: Request, res: Response, next: NextFunction) {
     try {
       const dto = req.body as IUser;
@@ -24,9 +34,20 @@ class UserController {
 
   public async createMany(req: Request, res: Response, next: NextFunction) {
     try {
-      const dtos: ICreateUserDto[] = req.body;
-      const result = await userService.createMany(dtos);
+      const usersDto: ICreateUserDto[] = req.body;
+      const result = await userService.createMany(usersDto);
       res.status(201).json(result);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async delete(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = Number(req.params.id);
+      console.log(userId);
+      const user = await userService.delete(userId);
+      res.status(204).send(user);
     } catch (e) {
       next(e);
     }
