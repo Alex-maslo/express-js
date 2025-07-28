@@ -20,6 +20,7 @@ class UserRepository {
   public async create(dto: ICreateUserDto): Promise<IUser> {
     const users: IUser[] = await read();
     const { name, age, email, password } = dto;
+   
     const userId = users.length ? users[users.length - 1].id + 1 : 1;
 
     const saltRounds = 10;
@@ -63,11 +64,18 @@ class UserRepository {
 
   public async delete(id: number): Promise<IUser> {
     const users: IUser[] = await read();
-    const user = users.find((u) => u.id === id);
-    if (!user) {
+    const userIndex = users.findIndex((u) => {
+      return u.id === id;
+    });
+
+    if (userIndex === -1) {
       throw new ApiError(404, `User with id ${id} not found`);
     }
-    return user;
+
+    const [deletedUser] = users.splice(userIndex, 1);
+    await write(users);
+
+    return deletedUser;
   }
 }
 

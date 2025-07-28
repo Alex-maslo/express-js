@@ -45,9 +45,8 @@ class UserController {
   public async delete(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = Number(req.params.id);
-      console.log(userId);
       const user = await userService.delete(userId);
-      res.status(204).send(user);
+      res.status(200).json(user);
     } catch (e) {
       next(e);
     }
