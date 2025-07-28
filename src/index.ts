@@ -6,9 +6,11 @@ import fs from "fs/promises";
 
 import { ApiError } from "./errors/api-error";
 import { userRouter } from "./routers/user.router";
+import { configs } from "./config/config";
+import * as mongoose from "mongoose";
 
 const app = express();
-const port = 3000;
+const port = configs.APP_PORT;
 
 const DATA_PATH = path.join(process.cwd(), "db.json");
 
@@ -23,7 +25,9 @@ async function checkAndCreateFile(pathToFile: string) {
 async function startServer() {
   await checkAndCreateFile(DATA_PATH);
   app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+    mongoose.connect(configs.MONGO_URI, {});
+
+    console.log(`Server running on http://${configs.APP_HOST}:${port}`);
   });
 }
 
