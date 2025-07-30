@@ -1,14 +1,15 @@
-export interface IUser {
-  id: number;
-  name: string;
-  email: string;
-  age: number;
-  password: string;
-}
+import { RoleEnum } from "../enums/role.enum";
 
-export interface ICreateUserDto {
+export interface IUser {
+  _id?: string;
   name: string;
   age: number;
   email: string;
   password: string;
+  phone?: string;
+  role?: RoleEnum;
+  isVerified?: boolean;
+  isDeleted?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

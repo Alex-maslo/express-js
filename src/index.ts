@@ -1,35 +1,12 @@
-import path from "node:path";
-
 import express, { NextFunction, Request, Response } from "express";
-import { constants } from "fs";
-import fs from "fs/promises";
 
 import { ApiError } from "./errors/api-error";
 import { userRouter } from "./routers/user.router";
 import { configs } from "./config/config";
-import * as mongoose from "mongoose";
+import mongoose from "mongoose";
 
 const app = express();
 const port = configs.APP_PORT;
-
-const DATA_PATH = path.join(process.cwd(), "db.json");
-
-async function checkAndCreateFile(pathToFile: string) {
-  try {
-    await fs.access(pathToFile, constants.F_OK);
-  } catch {
-    await fs.writeFile(pathToFile, "[]", "utf8");
-  }
-}
-
-async function startServer() {
-  await checkAndCreateFile(DATA_PATH);
-  app.listen(port, () => {
-    mongoose.connect(configs.MONGO_URI, {});
-
-    console.log(`Server running on http://${configs.APP_HOST}:${port}`);
-  });
-}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -48,6 +25,20 @@ process.on("uncaughtException", (error) => {
   console.error("uncaughtException", error.message, error.stack);
   process.exit(1);
 });
+
+async function startServer() {
+  try {
+    await mongoose.connect(configs.MONGO_URI);
+    console.log("Підключено до MongoDB.");
+  } catch (error) {
+    console.error("Не вдалося підключитися до MongoDB:", error);
+    process.exit(1);
+  }
+
+  app.listen(port, () => {
+    console.log(`Сервер працює на http://${configs.APP_HOST}:${port}`);
+  });
+}
 
 startServer()
   .then(() => {

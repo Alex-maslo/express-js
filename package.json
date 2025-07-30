@@ -8,7 +8,8 @@
     "watch:server": "nodemon --exec ts-node src/index.ts",
     "start": "node ./dist/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "env:gen": "cp .env.example .env"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
