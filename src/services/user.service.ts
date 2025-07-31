@@ -6,8 +6,16 @@ class UserController {
     return await userRepository.getList();
   }
 
+  public async getOne(userId: string): Promise<IUser> {
+    return await userRepository.getOne(userId);
+  }
+
   public async create(user: IUser): Promise<IUser> {
     return await userRepository.create(user);
+  }
+
+  public async createMany(users: IUser[]): Promise<IUser[]> {
+    return await userRepository.createMany(users);
   }
 }
 
